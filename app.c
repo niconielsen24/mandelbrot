@@ -3,13 +3,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void shader_from_file(char * path, char * shader)
+void shader_from_file(char * path, char * shader, unsigned size)
 {
     FILE * file = fopen(path,"r");
     unsigned i = 0;
 
     while (fscanf(file,"%c",&shader[i]) != EOF)
     {
+        if (i > size) {fprintf(stderr,"Shader is too large"); break;}
         i++;
     }
 }
@@ -51,7 +52,7 @@ int main()
     glewInit();
 
     char fragment_shader[1024];
-    shader_from_file("shader/mandelbrot.glsl", fragment_shader);
+    shader_from_file("shader/mandelbrot.glsl", fragment_shader, 1024);
 
     char* vertex_shader =
                         "#version 410\n"
